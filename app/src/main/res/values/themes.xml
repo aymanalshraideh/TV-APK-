@@ -1,0 +1,10 @@
+<resources>
+    <style name="Theme.Noor" parent="android:Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:colorPrimary">@color/green</item>
+        <item name="android:colorAccent">@color/gold</item>
+    </style>
+    <color name="bg">#FF07141A</color>
+    <color name="green">#FF0F4C3A</color>
+    <color name="gold">#FFD4AF37</color>
+</resources>

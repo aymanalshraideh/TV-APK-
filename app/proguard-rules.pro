@@ -1,0 +1,7 @@
+-keepattributes *Annotation*, InnerClasses
+-keep,includedescriptorclasses class com.noor.tv.**$$serializer { *; }
+-keepclassmembers class com.noor.tv.** { *** Companion; }
+-keepclasseswithmembers class com.noor.tv.** { kotlinx.serialization.KSerializer serializer(...); }
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
