@@ -1,38 +1,44 @@
-# نور TV — Noor TV
+# Noor TV
 
-تطبيق Android TV لشاشة Haier LE55B8600TUN (أندرويد 6، رام 1GB):
+An Android TV app built for the Haier LE55B8600TUN (Android 6.0, 1 GB RAM, D-pad remote). Arabic, right-to-left UI.
 
-- **القرآن الكريم:** جميع القرّاء والروايات من mp3quran.net، بحث، فلترة بالحرف، مفضّلة، تشغيل متواصل بالخلفية، ومتابعة الاستماع.
-- **أوقات الصلاة:** من aladhan.com لكل مدن الأردن، طريقة وزارة الأوقاف الأردنية، عدّاد للصلاة القادمة، تعديل بالدقائق، فتح إذاعة القرآن عند الأذان، وتخزين الشهر كامل للعمل بدون إنترنت.
-- **راديو الأردن:** كل الإذاعات الأردنية من radio-browser.info مع إذاعات القرآن أولاً، بحث، مفضّلة، وآخر إذاعة.
-- **كرتون زمان:** قوائم تشغيل القنوات الرسمية (مثل سبيستون) عبر YouTube Data API وتُفتح في SmartTube، ومكتبة فيديوهاتك من الفلاشة أو الهارد مع استكمال المشاهدة وترجمة .srt.
+## Features
 
-## البناء
+- **Holy Quran:** every reciter and riwaya from mp3quran.net, with search, letter filter and favorites. Plays in the background, moves on to the next surah, and offers "continue listening" on launch.
+- **Prayer times:** all Jordanian cities via aladhan.com, using the Jordan Ministry of Awqaf method (switchable). Shows a live countdown to the next prayer, supports per-prayer minute offsets, and caches the whole month for offline use.
+- **Adhan:** at each prayer time, the app pauses whatever is playing and streams a Quran radio station for 5 minutes (station and duration set in Settings). It then resumes what was playing.
+- **Jordan radio:** Jordanian stations from radio-browser.info, with Quran stations listed first. Includes search, favorites and the last played station.
+- **Classic cartoons (80s/90s):** playlists from official YouTube channels such as Spacetoon via the YouTube Data API. Episodes open in SmartTube or any installed YouTube client. Also includes a personal library from USB or internal storage with resume and `.srt` subtitles.
 
-### الطريقة 1: GitHub Actions (بدون تثبيت أي إشي)
-1. ارفع المجلد على مستودع GitHub (خاص أو عام).
-2. (اختياري) ضيف secret اسمه `YOUTUBE_API_KEY`.
-3. بعد كل push، افتح تبويب **Actions** ← آخر تشغيل ← نزّل `NoorTV-apk`.
+## Download
 
-### الطريقة 2: Android Studio
-1. افتح المجلد في Android Studio (Ladybug أو أحدث). إذا طلب Gradle wrapper، وافق.
-2. (اختياري) ضيف في `local.properties`: `youtube.apiKey=YOUR_KEY`
-3. Build ← Build APK(s)، أو من الطرفية: `gradle assembleRelease`
-4. الملف: `app/build/outputs/apk/release/app-release.apk`
+Every push to `main` builds a release APK with GitHub Actions:
 
-## التثبيت على الشاشة
-- فعّل خيارات المطوّر وADB، ثم: `adb connect <TV_IP>:5555` و `adb install -r app-release.apk`
-- أو انسخ الـ APK على فلاشة وثبّته من مدير الملفات بعد تفعيل "مصادر غير معروفة".
+- **Latest APK:** the `apk` branch → `NoorTV.apk`
+- Or: the **Actions** tab → latest run → `NoorTV-apk` artifact
 
-## التخصيص
-- **إذاعات إضافية:** `app/src/main/assets/stations_jo.json` — ضع رابط البث في `url` (الإدخالات الفارغة تُتجاهل).
-- **قنوات كرتون رسمية:** `app/src/main/assets/classic_channels.json` — `handle` (مثل `@spacetoonyoutube`) أو `channelId`، مع `displayName` و `category`.
-- **الأذان:** عند دخول الوقت يفتح بث إذاعة القرآن الكريم (تختارها من الإعدادات) لمدة 5 دقائق افتراضياً، ثم يرجع التشغيل اللي كان شغّال.
-- **مفتاح يوتيوب:** من الإعدادات داخل التطبيق، أو من `local.properties`.
+## Install on the TV
 
-## ملاحظات تقنية
-- `minSdk 23`، Compose for TV، Media3 (ExoPlayer + MediaSession)، OkHttp، kotlinx.serialization، Coil.
-- شهادة ISRG Root X1 مضمّنة لأن أندرويد 6 لا يثق بشهادات Let's Encrypt.
-- `java.time` عبر core library desugaring.
-- المفضّلة والإعدادات في SharedPreferences، وردود الـ API مخزنة على القرص للعمل بدون إنترنت.
-- التوقيع: نسخة الـ release موقّعة بمفتاح debug لتسهيل التثبيت المباشر. غيّره قبل أي نشر.
+- Over ADB: enable Developer options and ADB on the TV, then run
+  `adb connect <TV_IP>:5555` and `adb install -r NoorTV.apk`
+- Or copy the APK to a USB stick, enable "Unknown sources", and install it from a file manager.
+
+## Build locally
+
+1. Open the project in Android Studio (Ladybug or newer). Accept the Gradle wrapper prompt if it appears.
+2. Optional: add `youtube.apiKey=YOUR_KEY` to `local.properties`.
+3. Run `gradle assembleRelease`. The APK is written to `app/build/outputs/apk/release/`.
+
+## Customization
+
+- **Extra radio stations:** `app/src/main/assets/stations_jo.json`. Set each stream URL in `url`; entries with an empty `url` are ignored.
+- **Official cartoon channels:** `app/src/main/assets/classic_channels.json`. Use `handle` (e.g. `@spacetoonyoutube`) or `channelId`, plus `displayName` and `category`.
+- **YouTube API key:** enter it in the app's Settings, or set the `YOUTUBE_API_KEY` repository secret for CI builds.
+
+## Technical notes
+
+- `minSdk 23`, Jetpack Compose for TV, Media3 (ExoPlayer + MediaSession), OkHttp, kotlinx.serialization, Coil.
+- Bundles the ISRG Root X1 certificate, because Android 6 does not trust Let's Encrypt certificates.
+- Uses `java.time` through core library desugaring.
+- Settings and favorites are stored in SharedPreferences. API responses are cached on disk for offline use.
+- **Signing:** the release build is signed with the debug key so it can be sideloaded directly. Replace it with your own keystore before publishing anywhere.
